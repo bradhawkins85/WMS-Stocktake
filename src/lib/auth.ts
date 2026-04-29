@@ -20,25 +20,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null
-        
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
-        })
-        
-        if (!user) return null
-        
-        const isValid = await bcrypt.compare(
-          credentials.password as string,
-          user.passwordHash
-        )
-        
-        if (!isValid) return null
-        
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
+
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email as string },
+          })
+
+          if (!user) return null
+
+          const isValid = await bcrypt.compare(
+            credentials.password as string,
+            user.passwordHash
+          )
+
+          if (!isValid) return null
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          }
+        } catch (err) {
+          console.error('[auth] Database error during sign-in for user:', credentials.email, err)
+          // Re-throw so Auth.js surfaces a server error rather than silently
+          // treating a DB failure as invalid credentials.
+          throw err
         }
       },
     }),

@@ -177,6 +177,9 @@ if [[ $ATTEMPTS -lt 30 ]]; then
 fi
 
 # ── 10. Seed database (first-run only, or when --seed is passed) ───────────────
+# The seed is also run automatically at container startup (see Dockerfile CMD),
+# so this step is only needed when explicitly requested via --seed outside of
+# the normal startup flow (e.g. to re-seed after a data wipe).
 if $OPT_SEED; then
   info "Seeding database with demo data…"
   $COMPOSE exec app sh -c "npx prisma db seed" && success "Database seeded." \
