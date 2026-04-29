@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
+import { useState, useEffect } from 'react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
@@ -10,6 +10,14 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const { data: session, status } = useSession()
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      const isAdmin = (session.user as { role?: string })?.role === 'ADMIN'
+      router.replace(isAdmin ? '/admin' : '/staff')
+    }
+  }, [session, status, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,6 +37,16 @@ export default function LoginPage() {
       router.push('/')
       router.refresh()
     }
+  }
+
+  if (status === 'loading' || status === 'authenticated') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-500 text-sm">
+          {status === 'authenticated' ? 'Redirecting...' : 'Loading...'}
+        </div>
+      </div>
+    )
   }
 
   return (
