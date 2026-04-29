@@ -1,6 +1,95 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Docker Deployment
+
+The easiest way to run WMS Stocktake in production is via Docker using the included `deploy.sh` script.
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/engine/install/) (v20+)
+- [Docker Compose](https://docs.docker.com/compose/install/) (plugin or standalone)
+
+### Fresh install
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd WMS-Stocktake
+
+# Run the deploy script (creates .env, builds image, runs migrations, starts app)
+./deploy.sh
+
+# Optional: seed the database with demo data
+./deploy.sh --seed
+```
+
+The script will:
+1. Check Docker / Docker Compose are available.
+2. Create a `.env` file from `.env.example` if one does not exist.
+3. Auto-generate a secure `NEXTAUTH_SECRET` if the value is blank.
+4. Build the Docker image.
+5. Start the container with a persistent SQLite volume.
+6. Run Prisma database migrations automatically on every start.
+
+The app will be available at **http://localhost:3000** (or the `NEXTAUTH_URL` you set in `.env`).
+
+### Configuration
+
+Edit `.env` before (or after) the first run:
+
+| Variable | Description | Default |
+|---|---|---|
+| `NEXTAUTH_URL` | Public URL of the app | `http://localhost:3000` |
+| `NEXTAUTH_SECRET` | JWT signing secret (auto-generated) | _(generated)_ |
+| `PORT` | Host port the app is exposed on | `3000` |
+| `DATAPEL_API_URL` | Datapel API base URL (optional) | _(empty)_ |
+| `DATAPEL_API_KEY` | Datapel API key (optional) | _(empty)_ |
+
+### Upgrading
+
+Run the same script to rebuild the image and restart the container. The SQLite database is preserved in a named Docker volume (`db_data`):
+
+```bash
+git pull
+./deploy.sh
+```
+
+Use `--no-cache` to force a clean image rebuild:
+
+```bash
+./deploy.sh --no-cache
+```
+
+### Useful commands
+
+```bash
+# View live logs
+docker compose logs -f
+
+# Open a shell inside the container
+docker compose exec app sh
+
+# Stop the app
+docker compose down
+
+# Remove everything including the database volume (⚠ destructive)
+docker compose down -v
+```
+
+### Default credentials (demo seed)
+
+When seeded with `./deploy.sh --seed` the following accounts are created:
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@example.com | admin123 |
+| Staff | staff@example.com | staff123 |
+
+**Change these passwords immediately after the first login.**
+
+---
+
+## Getting Started (local development)
 
 First, run the development server:
 
