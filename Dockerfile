@@ -93,4 +93,4 @@ ENV HOSTNAME="0.0.0.0"
 
 # DATABASE_URL, NEXTAUTH_SECRET, and NEXTAUTH_URL must be supplied at runtime.
 # The entrypoint runs migrations before starting the server.
-CMD ["sh", "-c", "npx prisma migrate deploy && node server.js"]
+CMD ["sh", "-c", "set -e; npx prisma migrate deploy && npx prisma db seed && node server.js"]
