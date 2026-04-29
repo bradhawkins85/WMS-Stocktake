@@ -70,6 +70,7 @@ COPY --from=builder /app/node_modules/typescript                 ./node_modules/
 COPY --from=builder /app/node_modules/@swc                       ./node_modules/@swc
 # ts-node runtime dependencies
 COPY --from=builder /app/node_modules/@cspotcode                 ./node_modules/@cspotcode
+COPY --from=builder /app/node_modules/@jridgewell                ./node_modules/@jridgewell
 COPY --from=builder /app/node_modules/@tsconfig                  ./node_modules/@tsconfig
 COPY --from=builder /app/node_modules/acorn                      ./node_modules/acorn
 COPY --from=builder /app/node_modules/acorn-walk                 ./node_modules/acorn-walk
