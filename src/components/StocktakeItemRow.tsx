@@ -27,6 +27,7 @@ export function StocktakeItemRow({ item }: { item: Item }) {
   const handleCancel = () => {
     setEditing(false)
     setCountedQty(item.countedQty?.toString() || '')
+    setNotes(item.notes || '')
   }
 
   const handleSave = async () => {

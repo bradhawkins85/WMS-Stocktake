@@ -1,3 +1,5 @@
+// Datapel API URL must be configured via DATAPEL_API_URL env var.
+// The fallback 'https://api.datapel.com' is a placeholder — set the real endpoint in .env.local.
 const DATAPEL_API_URL = process.env.DATAPEL_API_URL || 'https://api.datapel.com'
 const DATAPEL_API_KEY = process.env.DATAPEL_API_KEY || ''
 
