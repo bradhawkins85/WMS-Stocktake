@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("STAFF")
+  createdAt    DateTime @default(now())
+  
+  countedItems StocktakeItem[]
+}
+
+model Stocktake {
+  id                  String   @id @default(cuid())
+  name                String
+  status              String   @default("DRAFT")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  datapelWarehouseId  String?
+  datapelStocktakeId  String?
+  
+  items StocktakeItem[]
+}
+
+model StocktakeItem {
+  id          String    @id @default(cuid())
+  stocktakeId String
+  productCode String
+  productName String
+  expectedQty Float
+  unit        String    @default("EA")
+  countedQty  Float?
+  countedById String?
+  countedAt   DateTime?
+  notes       String?
+  
+  stocktake Stocktake @relation(fields: [stocktakeId], references: [id], onDelete: Cascade)
+  countedBy User?     @relation(fields: [countedById], references: [id])
+}
+
+model Product {
+  id               String  @id @default(cuid())
+  code             String  @unique
+  name             String
+  unit             String  @default("EA")
+  qrCode           String?
+  datapelProductId String?
+}
