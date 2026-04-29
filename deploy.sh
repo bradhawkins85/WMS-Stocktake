@@ -16,6 +16,7 @@
 #   script.  A .env file is created automatically from .env.example on the
 #   first run.
 # ──────────────────────────────────────────────────────────────────────────────
+git pull
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
