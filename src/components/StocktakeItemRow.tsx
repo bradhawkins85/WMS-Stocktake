@@ -22,7 +22,10 @@ export function StocktakeItemRow({ item }: { item: Item }) {
   const [notes, setNotes] = useState(item.notes || '')
   const [saving, setSaving] = useState(false)
 
-  const variance = item.countedQty !== null ? item.countedQty - item.expectedQty : null
+  const handleCancel = () => {
+    setEditing(false)
+    setCountedQty(item.countedQty?.toString() || '')
+  }
 
   const handleSave = async () => {
     setSaving(true)
@@ -100,7 +103,7 @@ export function StocktakeItemRow({ item }: { item: Item }) {
               {saving ? 'Saving...' : 'Save'}
             </button>
             <button
-              onClick={() => { setEditing(false); setCountedQty(item.countedQty?.toString() || ''); }}
+              onClick={handleCancel}
               className="text-gray-600 hover:text-gray-800"
             >
               Cancel
