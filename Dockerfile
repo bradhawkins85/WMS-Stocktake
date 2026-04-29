@@ -65,6 +65,7 @@ COPY --from=builder /app/node_modules/.bin             ./node_modules/.bin
 # Copy seed script dependencies
 COPY --from=builder /app/node_modules/bcryptjs                   ./node_modules/bcryptjs
 COPY --from=builder /app/node_modules/@types/bcryptjs            ./node_modules/@types/bcryptjs
+COPY --from=builder /app/node_modules/@types/node                ./node_modules/@types/node
 COPY --from=builder /app/node_modules/ts-node                    ./node_modules/ts-node
 COPY --from=builder /app/node_modules/typescript                 ./node_modules/typescript
 COPY --from=builder /app/node_modules/@swc                       ./node_modules/@swc
