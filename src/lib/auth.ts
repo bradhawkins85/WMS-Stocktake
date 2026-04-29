@@ -4,6 +4,13 @@ import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  // Trust the incoming host header. Required when the app is accessed via a
+  // hostname/IP that doesn't match NEXTAUTH_URL (e.g. behind a reverse proxy,
+  // via a LAN IP, or in Docker). Without this, Auth.js v5 rejects requests
+  // with an "UntrustedHost" error, which surfaces in the browser as a 500 on
+  // /api/auth/session and the message "There was a problem with the server
+  // configuration".
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: 'credentials',
