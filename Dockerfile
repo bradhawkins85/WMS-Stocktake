@@ -63,13 +63,24 @@ COPY --from=builder /app/node_modules/prisma           ./node_modules/prisma
 COPY --from=builder /app/node_modules/.bin             ./node_modules/.bin
 
 # Copy seed script dependencies
-COPY --from=builder /app/node_modules/bcryptjs         ./node_modules/bcryptjs
-COPY --from=builder /app/node_modules/@types/bcryptjs  ./node_modules/@types/bcryptjs
-COPY --from=builder /app/node_modules/ts-node          ./node_modules/ts-node
-COPY --from=builder /app/node_modules/typescript       ./node_modules/typescript
-COPY --from=builder /app/node_modules/@swc             ./node_modules/@swc
-COPY --from=builder /app/tsconfig.json                 ./tsconfig.json
-COPY --from=builder /app/package.json                  ./package.json
+COPY --from=builder /app/node_modules/bcryptjs                   ./node_modules/bcryptjs
+COPY --from=builder /app/node_modules/@types/bcryptjs            ./node_modules/@types/bcryptjs
+COPY --from=builder /app/node_modules/ts-node                    ./node_modules/ts-node
+COPY --from=builder /app/node_modules/typescript                 ./node_modules/typescript
+COPY --from=builder /app/node_modules/@swc                       ./node_modules/@swc
+# ts-node runtime dependencies
+COPY --from=builder /app/node_modules/@cspotcode                 ./node_modules/@cspotcode
+COPY --from=builder /app/node_modules/@tsconfig                  ./node_modules/@tsconfig
+COPY --from=builder /app/node_modules/acorn                      ./node_modules/acorn
+COPY --from=builder /app/node_modules/acorn-walk                 ./node_modules/acorn-walk
+COPY --from=builder /app/node_modules/arg                        ./node_modules/arg
+COPY --from=builder /app/node_modules/create-require             ./node_modules/create-require
+COPY --from=builder /app/node_modules/diff                       ./node_modules/diff
+COPY --from=builder /app/node_modules/make-error                 ./node_modules/make-error
+COPY --from=builder /app/node_modules/v8-compile-cache-lib       ./node_modules/v8-compile-cache-lib
+COPY --from=builder /app/node_modules/yn                         ./node_modules/yn
+COPY --from=builder /app/tsconfig.json                           ./tsconfig.json
+COPY --from=builder /app/package.json                            ./package.json
 
 # Persistent data directory (mount as a named volume in docker-compose)
 RUN mkdir -p /data && chown nextjs:nodejs /data
