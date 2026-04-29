@@ -22,6 +22,8 @@ export function StocktakeItemRow({ item }: { item: Item }) {
   const [notes, setNotes] = useState(item.notes || '')
   const [saving, setSaving] = useState(false)
 
+  const variance = item.countedQty !== null ? item.countedQty - item.expectedQty : null
+
   const handleCancel = () => {
     setEditing(false)
     setCountedQty(item.countedQty?.toString() || '')
